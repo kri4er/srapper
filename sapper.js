@@ -35,7 +35,7 @@ function createField(count) {
                 if (mines[y][x]) {
                     $img.style.display = 'block'
                     $cell.style.background = '#800'
-                    $("#boom").show(1000)
+                    $(".boom").show(1000)
                 }
                 else {
                     let p = proximity(x, y)
@@ -65,6 +65,6 @@ function createField(count) {
 }
 
 window.onload = function() {
-    $("#boom").hide()
+    $(".boom").hide()
     createField(15)
 }

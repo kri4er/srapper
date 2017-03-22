@@ -1,15 +1,16 @@
-div#field {
+#field {
     padding: 0;
 }
 
-div.row {
+
+.row {
     display: block;
     margin: 0;
     padding: 0;
     border: 0;
 }
 
-div.cell {
+.cell {
     display: inline-block;
     vertical-align: top;
     text-align: center;

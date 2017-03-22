@@ -1,0 +1,23 @@
+div#field {
+    padding: 0;
+}
+
+div.row {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+div.cell {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 64px;№
+    background: #080;
+    margin: 0;
+    padding: 0;
+    border: 2px solid #050;
+    width: 64px;
+    height: 64px;
+}

@@ -27,13 +27,14 @@ function proximity(x, y) {
     return count;
 }
 
+// opens the cell at (x, y)
 function open(x, y) {
     var cell = cellAt(x, y)
-    if ($(cell).hasClass('open'))
+    if ($(cell).hasClass('open') || $(cell).hasClass('mark'))
         return
     $(cell).addClass('open')
     if ($(cell).hasClass('mine')) {
-        $(".boom").show(1000)
+        $("#result").addClass('lose')
     }
     else {
         let p = proximity(x, y)
@@ -46,16 +47,41 @@ function open(x, y) {
     }
 }
 
+function isWinner() {
+    for (var x = 0; x < width; x++) {
+        for (var y = 0; y < height; y++) {
+            var $cell = $(cellAt(x, y));
+            if (!$cell.hasClass("open") && !$cell.hasClass("mine")) {
+                return false
+            }
+        }
+    }
+    return true
+}
+
+function mark(x, y) {
+    var $cell = $(cellAt(x, y))
+    if (!$cell.hasClass('open')) {
+        $cell.toggleClass('mark')
+    }
+}
+
 function createField() {
     var $field = document.getElementById('field')
     for (let y = 0; y < height; ++y) { // for each row
         var $row = document.createElement('div')
         $row.className = 'row'
-        for (let x = 0; x < width; ++x) { // fill row
+        for (let x = 0; x < width; ++x) { // for each cell in row
             let $cell = document.createElement('div')
             $cell.className = 'cell'
             $row.appendChild($cell)
-            $cell.onclick = function() { open(x, y) }
+            $cell.onclick = function() {
+                open(x, y)
+                if (isWinner()) {
+                    $("#result").addClass('win')
+                }
+            }
+            $cell.onmouseup = function(ev) { if (ev.button === 2) { mark(x, y) } }
         }
         $field.appendChild($row)
     }
@@ -74,6 +100,7 @@ function createMines(count) {
 }
 
 window.onload = function() {
+    window.oncontextmenu = function() { return false }
     $(".boom").hide()
     createField()
     createMines(10)

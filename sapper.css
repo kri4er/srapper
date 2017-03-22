@@ -34,6 +34,10 @@ body {
     background-color: #0b0;
 }
 
+.cell.mark {
+    background-image: url("mine.svg");
+}
+
 .cell.open.mine {
     background-color: #800;
     background-image: url("mine.svg");
@@ -41,4 +45,36 @@ body {
 
 .cell:hover {
     border-color: #880;
+}
+
+#result {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 75%;
+}
+
+img.win, img.lose {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: visibility 0s, opacity 1.5s linear;
+}
+
+#result.win > img.win {
+    display: block;
+    width: auto;
+    height: 100%;
+    visibility: visible;
+    opacity: 1;
+}
+
+#result.lose > img.lose {
+    display: block;
+    visibility: visible;
+    opacity: 1;
 }

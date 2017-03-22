@@ -1,7 +1,14 @@
-#field {
-    padding: 0;
+body {
+    background: #222;
 }
 
+#field {
+    position: absolute;
+    padding: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
 
 .row {
     display: block;
@@ -21,4 +28,17 @@
     border: 2px solid #050;
     width: 64px;
     height: 64px;
+}
+
+.cell.open {
+    background-color: #0b0;
+}
+
+.cell.open.mine {
+    background-color: #800;
+    background-image: url("mine.svg");
+}
+
+.cell:hover {
+    border-color: #880;
 }

@@ -1,70 +1,80 @@
 var width = 8
 var height = 8
-var mines = []
 
 // returns random number in range [0, max)
 function rand(max) {
   return Math.floor(Math.random() * max)
 }
 
+function cellAt(x, y) {
+    return document.getElementById('field').children[y].children[x]
+}
+
+// calls fn function for each neighbor of the cell at (x, y)
+function forEachNeighbor(x, y, fn) {
+    for (let cx = Math.max(0, x - 1); cx <= Math.min(x + 1, width - 1); ++cx)
+        for (let cy = Math.max(0, y - 1); cy <= Math.min(y + 1, height - 1); ++cy)
+            fn(cx, cy) // call fn function
+}
+
 // returns mine count around the given cell
-function proximity(cx, cy) { // cx = 2, cy = 5
+function proximity(x, y) {
     let count  = 0
-    for (let x = Math.max(0, cx - 1); x <= Math.min(cx + 1, width - 1); ++x)
-        for (let y = Math.max(0, cy - 1); y <= Math.min(cy + 1, height - 1); ++y)
-            count += mines[y][x]
+    forEachNeighbor(x, y, function(x, y) {
+        if ($(cellAt(x, y)).hasClass('mine'))
+            count += 1
+    })
     return count;
 }
 
-function createField(count) {
+function open(x, y) {
+    var cell = cellAt(x, y)
+    if ($(cell).hasClass('open'))
+        return
+    $(cell).addClass('open')
+    if ($(cell).hasClass('mine')) {
+        $(".boom").show(1000)
+    }
+    else {
+        let p = proximity(x, y)
+        if (p !== 0) {
+            cell.innerText = p
+        }
+        else {
+            forEachNeighbor(x, y, function(x, y) { open(x, y) })
+        }
+    }
+}
+
+function createField() {
     var $field = document.getElementById('field')
     for (let y = 0; y < height; ++y) { // for each row
         var $row = document.createElement('div')
-        var row = []
         $row.className = 'row'
         for (let x = 0; x < width; ++x) { // fill row
             let $cell = document.createElement('div')
             $cell.className = 'cell'
-            let $img = new Image()
-            $img.src = 'mine.svg'
-            $img.style.display = 'none'
-            $cell.appendChild($img)
             $row.appendChild($cell)
-            row.push(0)
-            $cell.onclick = function() {
-                if (mines[y][x]) {
-                    $img.style.display = 'block'
-                    $cell.style.background = '#800'
-                    $(".boom").show(1000)
-                }
-                else {
-                    let p = proximity(x, y)
-                    if (p !== 0) {
-                        $cell.innerHTML = p
-                    }
-                    $cell.style.background = '#0b0'
-                }
-            }
+            $cell.onclick = function() { open(x, y) }
         }
         $field.appendChild($row)
-        mines.push(row)
     }
+}
 
+function createMines(count) {
     for (var i = 0; i < count; ++i) {
         while (true) {
-            var x = rand(width)
-            var y = rand(height)
-            if (mines[y][x] === 0) {
-                mines[y][x] = 1
-                //mines[x][y].img.style.display = 'block'
-                break;
+            var $cell = $(cellAt(rand(width), rand(height)))
+            if (!$cell.hasClass('mine')) {
+                $cell.addClass('mine')
+                break
             }
         }
     }
-    console.log(JSON.stringify(mines))
 }
 
 window.onload = function() {
     $(".boom").hide()
-    createField(15)
+    createField()
+    createMines(10)
 }

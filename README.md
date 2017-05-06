@@ -1,2 +1,2 @@
 # srapper
-game coding
+This is erotick version of popular game saper :)
